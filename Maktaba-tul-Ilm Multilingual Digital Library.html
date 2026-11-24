@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maktaba-tul-Ilm | مکتبۃ العلم | مكتبة العلم</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter, Lora, Noto Nastaliq Urdu, Amiri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#FAF6EE',
+                        parchmentDark: '#F2EAD8',
+                        emeraldDeep: '#0F4C3A',
+                        emeraldHover: '#0A3629',
+                        goldAccent: '#C59B27',
+                        goldLight: '#F3E8C8',
+                        inkDark: '#1E2421',
+                        inkMuted: '#57635D'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                        urdu: ['Noto Nastaliq Urdu', 'Amiri', 'serif'],
+                        arabic: ['Amiri', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbars, geometric manuscript pattern & script line-heights */
+        body {
+            background-color: #FAF6EE;
+            color: #1E2421;
+        }
+        .manuscript-pattern {
+            background-image: radial-gradient(rgba(197, 155, 39, 0.14) 1px, transparent 1px),
+                              radial-gradient(rgba(15, 76, 58, 0.08) 1px, #F2EAD8 1px);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
+        }
+        .font-urdu {
+            font-family: 'Noto Nastaliq Urdu', 'Amiri', serif;
+            line-height: 2.35;
+        }
+        .font-arabic {
+            font-family: 'Amiri', serif;
+            line-height: 1.95;
+        }
+        .card-hover {
+            transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.24s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 32px -10px rgba(15, 76, 58, 0.18);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Reader themes */
+        .reader-theme-light {
+            background-color: #FFFFFF;
+            color: #1A202C;
+        }
+        .reader-theme-sepia {
+            background-color: #FAF6EE;
+            color: #2B2118;
+        }
+        .reader-theme-dark {
+            background-color: #121715;
+            color: #E5E7EB;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-goldLight selection:text-emeraldDeep">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-30 bg-emeraldDeep text-white shadow-lg border-b-2 border-goldAccent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+            <!-- Brand Identity & Founder Badge -->
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-goldAccent/20 border border-goldAccent flex items-center justify-center text-goldAccent shrink-0 shadow-inner">
+                    <i data-lucide="book-open" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-white">Maktaba-tul-Ilm</h1>
+                        <span class="text-goldAccent text-sm sm:text-base font-arabic" dir="rtl">مکتبۃ العلم • مكتبة العلم</span>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap mt-0.5">
+                        <span id="uiSubtitle" class="text-xs text-emerald-100/85">Multilingual Books & Articles Archive</span>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-goldAccent/20 text-goldLight border border-goldAccent/40">
+                            <i data-lucide="award" class="w-3 h-3 text-goldAccent"></i>
+                            <span>Curated by Altaf Khan (الطاف خان)</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Controls: UI Language Switcher, Sync Status & Upload CTA -->
+            <div class="flex items-center gap-2.5 flex-wrap">
+                <!-- Trilingual Interface Toggle -->
+                <div class="flex items-center bg-emeraldHover p-1 rounded-xl border border-emerald-700/80" title="Switch Interface Language">
+                    <button onclick="setInterfaceLang('en')" data-uilang="en" class="ui-lang-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer bg-goldAccent text-inkDark">EN</button>
+                    <button onclick="setInterfaceLang('ur')" data-uilang="ur" class="ui-lang-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer text-emerald-100 hover:text-white font-urdu leading-none">اردو</button>
+                    <button onclick="setInterfaceLang('ar')" data-uilang="ar" class="ui-lang-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer text-emerald-100 hover:text-white font-arabic">عربي</button>
+                </div>
+
+                <!-- Live Sync Pill -->
+                <div id="syncStatus" class="hidden md:flex items-center gap-1.5 text-xs bg-emeraldHover px-3 py-1.5 rounded-full text-emerald-100 border border-emerald-700">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="syncDot"></span>
+                    <span id="syncText">Connecting...</span>
+                </div>
+
+                <!-- Publish Studio Button -->
+                <button onclick="openUploadModal()" class="flex items-center gap-2 bg-goldAccent hover:bg-amber-400 text-inkDark font-bold px-4 py-2.5 rounded-xl shadow-md transition active:scale-95 cursor-pointer">
+                    <i data-lucide="feather" class="w-4 h-4"></i>
+                    <span id="uiUploadBtnText">Publish Book / Article</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner, Stats & Search Bar -->
+    <section class="manuscript-pattern border-b border-amber-900/15 py-8 sm:py-11 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/85 border border-goldAccent/40 text-emeraldDeep text-xs font-semibold mb-3 shadow-xs">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-goldAccent"></i>
+                <span id="uiHeroBadge">Founded & Curated by Altaf Khan • Open Knowledge Repository</span>
+            </div>
+
+            <h2 id="uiHeroTitle" class="font-serif text-2xl sm:text-4xl lg:text-[42px] font-bold text-inkDark mb-3 leading-tight">
+                Read, Study & Publish Across Three Great Traditions
+            </h2>
+            <p id="uiHeroDesc" class="text-sm sm:text-base text-inkMuted max-w-2xl mx-auto mb-6">
+                Explore multi-chapter classics, poetry, history, and scholarly essays in English, Urdu, and Arabic—or publish your own books directly into the archive.
+            </p>
+
+            <!-- Search Input -->
+            <div class="relative max-w-2xl mx-auto mb-7">
+                <i data-lucide="search" class="w-5 h-5 text-inkMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    oninput="handleFilterChange()"
+                    placeholder="Search title, author, chapter, or topic in English, اردو, or العربية..." 
+                    class="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-white border border-amber-900/20 shadow-md focus:outline-none focus:ring-2 focus:ring-emeraldDeep text-sm sm:text-base"
+                >
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3.5 top-1/2 -translate-y-1/2 text-inkMuted hover:text-inkDark p-1 cursor-pointer">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Live Library Analytics Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-2xl border border-amber-900/10 shadow-xs">
+                    <p class="text-xl sm:text-2xl font-serif font-bold text-emeraldDeep" id="statTotalWorks">0</p>
+                    <p class="text-xs text-inkMuted font-medium" id="uiStatTotal">Total Works</p>
+                </div>
+                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-2xl border border-amber-900/10 shadow-xs">
+                    <p class="text-xl sm:text-2xl font-serif font-bold text-emeraldDeep" id="statTotalBooks">0</p>
+                    <p class="text-xs text-inkMuted font-medium" id="uiStatBooks">Multi-Chapter Books</p>
+                </div>
+                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-2xl border border-amber-900/10 shadow-xs">
+                    <p class="text-xl sm:text-2xl font-serif font-bold text-emeraldDeep" id="statTotalArticles">0</p>
+                    <p class="text-xs text-inkMuted font-medium" id="uiStatArticles">Articles & Essays</p>
+                </div>
+                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-2xl border border-amber-900/10 shadow-xs">
+                    <p class="text-xl sm:text-2xl font-serif font-bold text-goldAccent" id="statSavedCount">0</p>
+                    <p class="text-xs text-inkMuted font-medium" id="uiStatSaved">Saved Bookmarks</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter & Sort Controls Bar -->
+    <section class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/90 backdrop-blur-sm p-3.5 rounded-2xl border border-amber-900/10 shadow-sm">
+            
+            <!-- Language & Saved Tabs -->
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar" role="tablist" aria-label="Filter by language">
+                <button onclick="setLanguageFilter('all')" data-lang="all" class="lang-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer shrink-0 bg-emeraldDeep text-white">
+                    All Languages
+                </button>
+                <button onclick="setLanguageFilter('Urdu')" data-lang="Urdu" class="lang-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer shrink-0 text-inkMuted hover:bg-parchmentDark font-urdu text-base leading-none py-1.5">
+                    اردو (Urdu)
+                </button>
+                <button onclick="setLanguageFilter('Arabic')" data-lang="Arabic" class="lang-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer shrink-0 text-inkMuted hover:bg-parchmentDark font-arabic text-base">
+                    العربية (Arabic)
+                </button>
+                <button onclick="setLanguageFilter('English')" data-lang="English" class="lang-tab px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer shrink-0 text-inkMuted hover:bg-parchmentDark">
+                    English
+                </button>
+                <button onclick="toggleSavedOnlyFilter()" id="savedOnlyBtn" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer shrink-0 text-inkMuted hover:bg-parchmentDark flex items-center gap-1.5 border border-transparent">
+                    <i data-lucide="bookmark" class="w-3.5 h-3.5 text-goldAccent"></i>
+                    <span>Saved</span>
+                </button>
+            </div>
+
+            <!-- Type, Category & Sort Filters -->
+            <div class="flex flex-wrap items-center gap-2.5">
+                <div class="flex items-center bg-parchmentDark p-1 rounded-xl border border-amber-900/10">
+                    <button onclick="setTypeFilter('all')" data-type="all" class="type-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-emeraldDeep shadow-sm">
+                        All
+                    </button>
+                    <button onclick="setTypeFilter('Book')" data-type="Book" class="type-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-inkMuted hover:text-inkDark">
+                        Books / کتب
+                    </button>
+                    <button onclick="setTypeFilter('Article')" data-type="Article" class="type-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-inkMuted hover:text-inkDark">
+                        Articles / مضامین
+                    </button>
+                </div>
+
+                <select id="categoryFilter" onchange="handleFilterChange()" class="px-3 py-2 rounded-xl bg-parchment border border-amber-900/15 text-xs font-medium text-inkDark focus:outline-none focus:ring-2 focus:ring-emeraldDeep cursor-pointer">
+                    <option value="all">All Categories</option>
+                    <option value="Literature">Literature (ادب)</option>
+                    <option value="Poetry">Poetry & Kalam (شاعری و کلام)</option>
+                    <option value="Grammar & Rhetoric">Grammar & Rhetoric (نحو و بلاغت)</option>
+                    <option value="Philosophy & Ethics">Philosophy & Ethics (فلسفہ و اخلاق)</option>
+                    <option value="History">History & Civilization (تاریخ و تہذیب)</option>
+                    <option value="Self-Improvement">Self-Improvement (تربیت و اصلاح)</option>
+                </select>
+
+                <select id="sortFilter" onchange="handleFilterChange()" class="px-3 py-2 rounded-xl bg-parchment border border-amber-900/15 text-xs font-medium text-inkDark focus:outline-none focus:ring-2 focus:ring-emeraldDeep cursor-pointer">
+                    <option value="newest">Sort: Newest First</option>
+                    <option value="liked">Sort: Most Appreciated</option>
+                    <option value="alpha">Sort: Alphabetical</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Active Stats Summary -->
+        <div class="flex items-center justify-between mt-4 px-1 text-xs sm:text-sm text-inkMuted">
+            <p id="resultsCount">Showing 0 works</p>
+            <p class="hidden sm:block">Open any book for chapter navigation, audio read-aloud, themes & study notes</p>
+        </div>
+    </section>
+
+    <!-- Main Library Grid -->
+    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 pb-16 flex-1">
+        <div id="libraryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards injected dynamically -->
+        </div>
+
+        <!-- Empty Search State -->
+        <div id="emptyState" class="hidden text-center py-16 px-4 bg-white rounded-3xl border border-amber-900/10 mt-4">
+            <div class="w-16 h-16 rounded-full bg-parchmentDark text-emeraldDeep flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="book-x" class="w-8 h-8"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-inkDark mb-2">No matching books or articles found</h3>
+            <p class="text-sm text-inkMuted max-w-md mx-auto mb-6">Try clearing your search filters, or publish a new work on this subject directly into the library.</p>
+            <div class="flex justify-center gap-3">
+                <button onclick="resetAllFilters()" class="px-4 py-2.5 rounded-xl border border-emeraldDeep text-emeraldDeep font-medium text-sm hover:bg-parchment transition cursor-pointer">
+                    Reset Filters
+                </button>
+                <button onclick="openUploadModal()" class="px-4 py-2.5 rounded-xl bg-emeraldDeep text-white font-medium text-sm hover:bg-emeraldHover transition cursor-pointer">
+                    Publish New Work
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-emeraldDeep text-emerald-100/85 border-t-2 border-goldAccent/60 py-8 px-4 text-xs sm:text-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-center md:text-left">
+                <p class="font-serif text-white text-base font-bold">Maktaba-tul-Ilm — <span class="font-arabic text-goldAccent">مکتبۃ العلم • مكتبة العلم</span></p>
+                <p class="text-xs text-emerald-100/75 mt-1">Empowering open reading & multilingual publishing in Urdu, Arabic, and English.</p>
+            </div>
+            <div class="flex flex-col items-center md:items-end gap-1">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emeraldHover border border-goldAccent/50 text-goldLight font-semibold text-xs">
+                    <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-goldAccent"></i>
+                    <span>Curated & Founded by Altaf Khan (الطاف خان)</span>
+                </span>
+                <p class="text-[11px] text-emerald-200/60">Digital Manuscript & Community Publishing Platform</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Banner -->
+    <div id="toastBox" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-inkDark text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-goldAccent/60 flex items-center gap-3 text-sm">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-goldAccent shrink-0" id="toastIcon"></i>
+            <span id="toastMessage">Published successfully!</span>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- ADVANCED READER & STUDY STUDIO MODAL                                  -->
+    <!-- ===================================================================== -->
+    <div id="readerModal" class="fixed inset-0 z-40 hidden bg-black/75 backdrop-blur-xs flex items-center justify-center p-1.5 sm:p-5">
+        <div id="readerWindow" class="reader-theme-sepia w-full max-w-6xl h-[94vh] rounded-3xl shadow-2xl border border-goldAccent/50 flex flex-col overflow-hidden transition-colors duration-200">
+            
+            <!-- Top Scroll Reading Progress Bar -->
+            <div class="w-full h-1.5 bg-black/10 shrink-0">
+                <div id="readerProgressBar" class="h-full bg-goldAccent transition-all duration-150" style="width: 0%"></div>
+            </div>
+
+            <!-- Reader Top Study Toolbar -->
+            <div class="bg-white/95 text-inkDark px-3 sm:px-6 py-3 border-b border-amber-900/15 flex flex-wrap items-center justify-between gap-2 shrink-0">
+                <!-- Left Badges & Chapter Drawer Toggle -->
+                <div class="flex items-center gap-2">
+                    <button id="toggleChaptersBtn" onclick="toggleChapterSidebar()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emeraldDeep text-white text-xs font-semibold hover:bg-emeraldHover transition cursor-pointer">
+                        <i data-lucide="list" class="w-3.5 h-3.5"></i>
+                        <span>Chapters</span>
+                    </button>
+                    <span id="readerLangBadge" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emeraldDeep/10 text-emeraldDeep">English</span>
+                    <span id="readerTypeBadge" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-goldLight text-inkDark">Book</span>
+                    <span id="readerReadTime" class="hidden md:inline-flex items-center gap-1 text-xs text-inkMuted">
+                        <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                        <span>5 min read</span>
+                    </span>
+                </div>
+
+                <!-- Right Study Tools: Audio TTS, Theme Switcher, Line Spacing, Font Size, Bookmark, Like, Close -->
+                <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                    <!-- Read Aloud TTS -->
+                    <button onclick="toggleSpeechReadAloud()" id="ttsBtn" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-parchmentDark hover:bg-goldLight text-inkDark text-xs font-semibold transition cursor-pointer" title="Listen / Text-to-Speech">
+                        <i data-lucide="volume-2" class="w-3.5 h-3.5 text-emeraldDeep" id="ttsIcon"></i>
+                        <span id="ttsLabel" class="hidden sm:inline">Listen</span>
+                    </button>
+
+                    <!-- Reader Theme Switcher -->
+                    <div class="flex items-center bg-parchmentDark rounded-xl p-1 border border-amber-900/10" title="Reader Theme">
+                        <button onclick="setReaderTheme('light')" class="w-6 h-6 rounded-lg bg-white border border-gray-300 text-[10px] font-bold text-gray-800 cursor-pointer" title="Paper White">W</button>
+                        <button onclick="setReaderTheme('sepia')" class="w-6 h-6 rounded-lg bg-[#FAF6EE] border border-amber-400 text-[10px] font-bold text-amber-950 mx-0.5 cursor-pointer" title="Manuscript Parchment">S</button>
+                        <button onclick="setReaderTheme('dark')" class="w-6 h-6 rounded-lg bg-[#121715] text-[10px] font-bold text-gray-100 cursor-pointer" title="Night Mode">N</button>
+                    </div>
+
+                    <!-- Line Spacing Toggle -->
+                    <button onclick="cycleLineSpacing()" class="px-2.5 py-1.5 rounded-xl bg-parchmentDark hover:bg-white text-xs font-semibold text-inkDark border border-amber-900/10 transition cursor-pointer" title="Toggle Line Spacing">
+                        <i data-lucide="align-justify" class="w-3.5 h-3.5 inline"></i>
+                    </button>
+
+                    <!-- Font Size -->
+                    <div class="flex items-center bg-parchmentDark rounded-xl p-1 border border-amber-900/10" title="Adjust Font Size">
+                        <button onclick="adjustReaderFont(-2)" class="px-2 py-0.5 rounded-lg hover:bg-white text-xs font-bold text-inkDark transition cursor-pointer">A-</button>
+                        <span id="fontSizeIndicator" class="px-1.5 text-[11px] text-inkMuted">19px</span>
+                        <button onclick="adjustReaderFont(2)" class="px-2 py-0.5 rounded-lg hover:bg-white text-xs font-bold text-inkDark transition cursor-pointer">A+</button>
+                    </div>
+
+                    <!-- Like / Appreciate -->
+                    <button onclick="toggleLikeCurrentWork()" id="readerLikeBtn" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-parchmentDark hover:bg-rose-50 text-xs font-semibold text-inkDark border border-amber-900/10 transition cursor-pointer" title="Appreciate Work">
+                        <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-600" id="readerLikeIcon"></i>
+                        <span id="readerLikeCount">0</span>
+                    </button>
+
+                    <!-- Bookmark -->
+                    <button onclick="toggleBookmarkCurrentWork()" id="readerBookmarkBtn" class="p-2 rounded-xl bg-parchmentDark hover:bg-goldLight text-inkDark transition cursor-pointer" title="Save Bookmark">
+                        <i data-lucide="bookmark" class="w-4 h-4 text-goldAccent" id="readerBookmarkIcon"></i>
+                    </button>
+
+                    <!-- Close -->
+                    <button onclick="closeReaderModal()" class="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 transition cursor-pointer" aria-label="Close Reader">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Reader Body Split (Chapter Sidebar + Reading Pane) -->
+            <div class="flex flex-1 overflow-hidden relative">
+                
+                <!-- Multi-Chapter Navigation Sidebar -->
+                <aside id="chapterSidebar" class="hidden w-72 border-r border-amber-900/15 bg-black/5 overflow-y-auto p-4 shrink-0 flex-col gap-2">
+                    <div class="flex items-center justify-between pb-2 border-b border-amber-900/10">
+                        <span class="text-xs font-bold uppercase tracking-wider opacity-75">Table of Contents</span>
+                        <span id="chapterCountBadge" class="text-xs px-2 py-0.5 rounded-full bg-emeraldDeep text-white">1</span>
+                    </div>
+                    <div id="chapterListContainer" class="space-y-1.5 mt-1">
+                        <!-- Chapter buttons injected dynamically -->
+                    </div>
+                </aside>
+
+                <!-- Scrollable Reading & Notes Area -->
+                <div id="readerScrollArea" onscroll="updateReaderScrollProgress()" class="flex-1 overflow-y-auto p-5 sm:p-10 space-y-6">
+                    <div class="max-w-3xl mx-auto space-y-6">
+                        
+                        <!-- Book/Article Header -->
+                        <div id="readerHeaderBlock" class="border-b border-amber-900/15 pb-6">
+                            <div class="flex items-center gap-2 text-xs opacity-75 mb-2 flex-wrap">
+                                <span id="readerCatBadge" class="font-semibold text-emeraldDeep bg-emeraldDeep/10 px-2.5 py-0.5 rounded-md">Literature</span>
+                                <span id="readerYearBadge">• Classic Archive</span>
+                            </div>
+                            <h2 id="readerTitle" class="text-2xl sm:text-4xl font-bold mb-2 leading-snug">Book Title</h2>
+                            <p id="readerAuthor" class="text-sm sm:text-base text-emeraldDeep font-semibold">By Author Name</p>
+                            <p id="readerSummary" class="mt-3 text-sm opacity-85 italic bg-black/5 p-3.5 rounded-xl border border-amber-900/10"></p>
+                        </div>
+
+                        <!-- Active Chapter Header (for multi-chapter books) -->
+                        <div id="activeChapterBanner" class="hidden bg-emeraldDeep/10 border border-emeraldDeep/25 rounded-2xl px-4 py-3 flex items-center justify-between gap-3">
+                            <div>
+                                <p class="text-[11px] uppercase tracking-wider font-bold text-emeraldDeep">Currently Reading</p>
+                                <h3 id="activeChapterTitle" class="text-base sm:text-lg font-bold">Chapter 1</h3>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="navigateChapter(-1)" id="prevChapBtn" class="px-3 py-1.5 rounded-xl bg-white text-inkDark text-xs font-semibold shadow-xs disabled:opacity-40 cursor-pointer">Prev</button>
+                                <button onclick="navigateChapter(1)" id="nextChapBtn" class="px-3 py-1.5 rounded-xl bg-emeraldDeep text-white text-xs font-semibold shadow-xs disabled:opacity-40 cursor-pointer">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- Attached PDF / Document Viewer & Download Bar -->
+                        <div id="readerAttachmentBox" class="hidden bg-emeraldDeep/10 border border-emeraldDeep/25 rounded-2xl p-4 space-y-3">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-emeraldDeep text-white flex items-center justify-center shrink-0">
+                                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-semibold uppercase tracking-wider text-emeraldDeep">Attached Manuscript File</p>
+                                        <p id="readerFileName" class="text-sm font-medium break-all">document.pdf</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 w-full sm:w-auto">
+                                    <button id="togglePdfPreviewBtn" onclick="toggleInlinePdfViewer()" class="hidden px-3.5 py-2 rounded-xl bg-white text-emeraldDeep border border-emeraldDeep/30 text-xs font-semibold cursor-pointer">
+                                        Preview PDF
+                                    </button>
+                                    <a id="readerDownloadLink" href="#" download="document" class="w-full sm:w-auto text-center px-4 py-2 rounded-xl bg-emeraldDeep hover:bg-emeraldHover text-white text-xs font-semibold transition flex items-center justify-center gap-1.5">
+                                        <i data-lucide="download" class="w-4 h-4"></i>
+                                        <span>Download</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Embedded PDF Frame -->
+                            <iframe id="inlinePdfFrame" class="hidden w-full h-96 rounded-xl border border-amber-900/20 bg-white"></iframe>
+                        </div>
+
+                        <!-- Main Readable Content -->
+                        <article id="readerContent" class="whitespace-pre-line" style="font-size: 19px; line-height: 1.9;">
+                            Content goes here...
+                        </article>
+
+                        <!-- Bottom Chapter Navigation -->
+                        <div id="bottomChapterNav" class="hidden pt-6 border-t border-amber-900/15 flex items-center justify-between">
+                            <button onclick="navigateChapter(-1)" id="bottomPrevChapBtn" class="px-4 py-2.5 rounded-xl border border-emeraldDeep text-emeraldDeep text-xs sm:text-sm font-semibold disabled:opacity-40 cursor-pointer">
+                                ← Previous Chapter
+                            </button>
+                            <button onclick="navigateChapter(1)" id="bottomNextChapBtn" class="px-4 py-2.5 rounded-xl bg-emeraldDeep text-white text-xs sm:text-sm font-semibold disabled:opacity-40 cursor-pointer">
+                                Next Chapter →
+                            </button>
+                        </div>
+
+                        <!-- Reader Notes & Discussion Section -->
+                        <section class="pt-8 mt-8 border-t border-amber-900/20 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-serif text-lg font-bold flex items-center gap-2">
+                                    <i data-lucide="message-square" class="w-5 h-5 text-goldAccent"></i>
+                                    <span>Reader Reflections & Study Notes</span>
+                                </h4>
+                                <span id="notesCountLabel" class="text-xs opacity-75">0 notes</span>
+                            </div>
+
+                            <!-- Add Note Form -->
+                            <form onsubmit="handleAddNoteSubmit(event)" class="bg-black/5 p-4 rounded-2xl border border-amber-900/10 space-y-3">
+                                <div class="flex flex-col sm:flex-row gap-2.5">
+                                    <input type="text" id="noteReaderName" placeholder="Your Name (e.g., Altaf Khan)" class="px-3.5 py-2 rounded-xl bg-white text-inkDark border border-amber-900/15 text-xs sm:text-sm sm:w-1/3 focus:outline-none focus:ring-2 focus:ring-emeraldDeep">
+                                    <input type="text" id="noteCommentInput" required placeholder="Write a reflection, quote, or study note..." class="px-3.5 py-2 rounded-xl bg-white text-inkDark border border-amber-900/15 text-xs sm:text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-emeraldDeep">
+                                    <button type="submit" class="px-4 py-2 rounded-xl bg-emeraldDeep hover:bg-emeraldHover text-white text-xs sm:text-sm font-semibold transition cursor-pointer shrink-0">
+                                        Post Note
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Notes Feed -->
+                            <div id="readerNotesList" class="space-y-2.5">
+                                <!-- Notes rendered dynamically -->
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- ADVANCED MULTI-CHAPTER UPLOAD & PUBLISHING STUDIO MODAL               -->
+    <!-- ===================================================================== -->
+    <div id="uploadModal" class="fixed inset-0 z-40 hidden bg-black/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-5">
+        <div class="bg-white w-full max-w-3xl max-h-[93vh] rounded-3xl shadow-2xl border border-goldAccent/50 flex flex-col overflow-hidden">
+            
+            <!-- Modal Header -->
+            <div class="bg-emeraldDeep text-white px-6 py-4 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <i data-lucide="feather" class="w-5 h-5 text-goldAccent"></i>
+                    <div>
+                        <h3 class="font-serif text-lg sm:text-xl font-bold">Maktaba Publishing Studio</h3>
+                        <p class="text-[11px] text-emerald-100/80">Publish multi-chapter books or articles in Urdu, Arabic, or English</p>
+                    </div>
+                </div>
+                <button onclick="closeUploadModal()" class="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Upload Form -->
+            <form id="publishForm" onsubmit="handlePublishSubmit(event)" class="p-5 sm:p-6 overflow-y-auto space-y-5">
+                
+                <!-- Row 1: Language, Format Type & Category -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted mb-1.5">Language / زبان / اللغة *</label>
+                        <select id="pubLanguage" onchange="updateFormDirection()" required class="w-full px-3.5 py-2.5 rounded-xl bg-parchment border border-amber-900/20 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emeraldDeep">
+                            <option value="Urdu">اردو - Urdu (RTL)</option>
+                            <option value="Arabic">العربية - Arabic (RTL)</option>
+                            <option value="English">English (LTR)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted mb-1.5">Format Type *</label>
+                        <select id="pubType" onchange="toggleBookChaptersMode()" required class="w-full px-3.5 py-2.5 rounded-xl bg-parchment border border-amber-900/20 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emeraldDeep">
+                            <option value="Book">Multi-Chapter Book (کتاب)</option>
+                            <option value="Article">Single Article (مضمون / مقال)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted mb-1.5">Category *</label>
+                        <select id="pubCategory" required class="w-full px-3.5 py-2.5 rounded-xl bg-parchment border border-amber-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldDeep">
+                            <option value="Literature">Literature (ادب)</option>
+                            <option value="Poetry">Poetry & Kalam (شاعری و کلام)</option>
+                            <option value="Grammar & Rhetoric">Grammar & Rhetoric (نحو و بلاغت)</option>
+                            <option value="Philosophy & Ethics">Philosophy & Ethics (فلسفہ و اخلاق)</option>
+                            <option value="History">History & Civilization (تاریخ)</option>
+                            <option value="Self-Improvement">Self-Improvement (تربیت و اصلاح)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 2: Title & Author (with quick-fill for Altaf Khan) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted mb-1.5">Title *</label>
+                        <input type="text" id="pubTitle" required placeholder="کتاب یا مضمون کا عنوان درج کریں..." class="dir-aware-input w-full px-3.5 py-2.5 rounded-xl bg-parchment border border-amber-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldDeep">
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted">Author / Writer *</label>
+                            <button type="button" onclick="quickFillCuratorName()" class="text-[11px] font-semibold text-emeraldDeep hover:underline cursor-pointer">
+                                + Use "Altaf Khan"
+                            </button>
+                        </div>
+                        <input type="text" id="pubAuthor" required value="Altaf Khan (الطاف خان)" placeholder="Author or Contributor Name..." class="dir-aware-input w-full px-3.5 py-2.5 rounded-xl bg-parchment border border-amber-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldDeep">
+                    </div>
+                </div>
+
+                <!-- Row 3: Custom Cover Theme & Optional Cover Image -->
+                <div class="bg-parchment/70 p-4 rounded-2xl border border-amber-900/15 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted mb-2">Manuscript Cover Theme</label>
+                        <div class="flex items-center gap-2.5" id="coverThemePicker">
+                            <button type="button" onclick="selectCoverTheme('emerald')" data-theme="emerald" class="cover-swatch w-8 h-8 rounded-full bg-gradient-to-br from-emerald-800 to-emerald-950 ring-2 ring-offset-2 ring-goldAccent cursor-pointer" title="Royal Emerald"></button>
+                            <button type="button" onclick="selectCoverTheme('gold')" data-theme="gold" class="cover-swatch w-8 h-8 rounded-full bg-gradient-to-br from-amber-600 to-yellow-800 cursor-pointer" title="Burnished Gold"></button>
+                            <button type="button" onclick="selectCoverTheme('burgundy')" data-theme="burgundy" class="cover-swatch w-8 h-8 rounded-full bg-gradient-to-br from-rose-800 to-red-950 cursor-pointer" title="Classic Crimson"></button>
+                            <button type="button" onclick="selectCoverTheme('sapphire')" data-theme="sapphire" class="cover-swatch w-8 h-8 rounded-full bg-gradient-to-br from-sky-800 to-slate-900 cursor-pointer" title="Andalusian Blue"></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted mb-1.5">Optional Cover Image (JPG/PNG)</label>
+                        <input type="file" id="pubCoverInput" accept="image/*" onchange="handleCoverImageSelect(event)" class="block w-full text-xs text-inkMuted file:mr-2.5 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-goldLight file:text-inkDark hover:file:bg-amber-200 cursor-pointer">
+                        <p id="coverStatusNote" class="text-[11px] text-emeraldDeep font-medium mt-1 hidden"></p>
+                    </div>
+                </div>
+
+                <!-- Short Summary -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted mb-1.5">Short Description / Summary *</label>
+                    <textarea id="pubSummary" rows="2" required placeholder="Brief overview shown on the library card..." class="dir-aware-input w-full px-3.5 py-2.5 rounded-xl bg-parchment border border-amber-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldDeep"></textarea>
+                </div>
+
+                <!-- Dynamic Chapter Builder (Shown for Books) -->
+                <div id="chaptersBuilderSection" class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold uppercase tracking-wider text-emeraldDeep">Book Chapters (ابواب / فصول)</label>
+                        <button type="button" onclick="addChapterField()" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emeraldDeep text-white text-xs font-semibold hover:bg-emeraldHover transition cursor-pointer">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            <span>Add Chapter</span>
+                        </button>
+                    </div>
+                    <div id="chaptersInputContainer" class="space-y-3">
+                        <!-- Dynamic chapter cards injected here -->
+                    </div>
+                </div>
+
+                <!-- Single Article Text Box (Shown when Format = Article) -->
+                <div id="singleArticleSection" class="hidden">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-inkMuted">Full Article Content *</label>
+                        <span id="dirIndicatorBadge" class="text-[11px] px-2 py-0.5 rounded bg-parchmentDark text-emeraldDeep font-medium">Direction: Right-to-Left</span>
+                    </div>
+                    <textarea id="pubContent" rows="6" placeholder="Paste or type your complete article here..." class="dir-aware-input w-full px-3.5 py-2.5 rounded-xl bg-parchment border border-amber-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldDeep"></textarea>
+                </div>
+
+                <!-- Optional Local Document Attachment (PDF / TXT / MD) -->
+                <div class="bg-parchmentDark/60 p-4 rounded-2xl border border-dashed border-emeraldDeep/40">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-emeraldDeep mb-1">
+                        Optional: Attach Local File (PDF, TXT, or Markdown up to 700 KB)
+                    </label>
+                    <p class="text-xs text-inkMuted mb-2.5">Attaching a <code>.txt</code> or <code>.md</code> file automatically fills Chapter 1 / Content, while <code>.pdf</code> files get an in-app PDF previewer & download button.</p>
+                    <input type="file" id="pubFileInput" accept=".pdf,.txt,.md" onchange="handleFileSelect(event)" class="block w-full text-xs text-inkMuted file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emeraldDeep file:text-white hover:file:bg-emeraldHover cursor-pointer">
+                    <p id="fileStatusNote" class="text-xs text-emeraldDeep font-medium mt-2 hidden"></p>
+                </div>
+
+                <!-- Submit Actions -->
+                <div class="pt-3 flex items-center justify-end gap-3 border-t border-amber-900/10">
+                    <button type="button" onclick="closeUploadModal()" class="px-5 py-2.5 rounded-xl border border-amber-900/20 text-inkMuted hover:bg-parchment text-sm font-medium transition cursor-pointer">
+                        Cancel
+                    </button>
+                    <button type="submit" id="publishSubmitBtn" class="px-6 py-2.5 rounded-xl bg-emeraldDeep hover:bg-emeraldHover text-white text-sm font-bold shadow-md transition flex items-center gap-2 cursor-pointer">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        <span>Publish to Maktaba</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- APPLICATION LOGIC & FIREBASE FIRESTORE PERSISTENCE                    -->
+    <!-- ===================================================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 1. Rich Curated Library Collection (10 Substantial Works across Urdu, Arabic & English)
+        const CURATED_WORKS = [
+            {
+                id: 'seed-ur-1',
+                title: 'کلیاتِ اقبال — منتخب کلام و پیغامِ خودی',
+                author: 'علامہ محمد اقبال (مرتب: الطاف خان)',
+                language: 'Urdu',
+                type: 'Book',
+                category: 'Poetry',
+                coverTheme: 'emerald',
+                year: '1924 / Classic Edition',
+                likes: 48,
+                summary: 'حکیم الامت علامہ اقبال کے مشہور اشعار، فلسفۂ خودی اور نوجوانانِ ملت کے نام بیداری کے پیغامات پر مشتمل منتخب مجموعہ۔',
+                chapters: [
+                    {
+                        title: 'باب اول: طلوعِ اسلام اور پیغامِ عمل',
+                        content: `دلیلِ صبحِ روشن ہے ستاروں کی تنک تابی\nافق سے آفتاب ابھرا گیا دورِ گراں خوابی\n\nعروقِ مردۂ مشرق میں خونِ زندگی دوڑا\nسمجھ سکتے نہیں اس راز کو سینا و فارابی\n\nمسلماں کو مسلماں کر دیا طوفانِ مغرب نے\nتلاطم ہائے دریا ہی سے ہے گوہر کی سیرابی\n\nتشریح و مفہوم:\nعلامہ اقبال اس کلام میں مایوسی کے اندھیروں کو چیر کر نئی صبح کے طلوع کی نوید سناتے ہیں۔ ان کے نزدیک زندگی مسلسل حرکت، جدوجہد اور خود شناسی کا نام ہے۔`
+                    },
+                    {
+                        title: 'باب دوم: فلسفۂ خودی اور شاہین کی پرواز',
+                        content: `خودی کو کر بلند اتنا کہ ہر تقدیر سے پہلے\nخدا بندے سے خود پوچھے بتا تیری رضا کیا ہے\n\nنہیں تیرا نشیمن قصرِ سلطانی کے گنبد پر\nتو شاہیں ہے بسیرا کر پہاڑوں کی چٹانوں میں\n\nاقبال نوجوانوں کو آرام طلبی چھوڑ کر بلند مقاصد کے حصول اور کردار کی پختگی اختیار کرنے کی تلقین کرتے ہیں۔`
+                    }
+                ],
+                createdAt: 1700000010000
+            },
+            {
+                id: 'seed-ur-2',
+                title: 'غبارِ خاطر — منتخب ادبی خطوط',
+                author: 'مولانا ابوالکلام آزاد',
+                language: 'Urdu',
+                type: 'Book',
+                category: 'Literature',
+                coverTheme: 'gold',
+                year: '1946',
+                likes: 42,
+                summary: 'قلعہ احمد نگر کی اسیری کے دوران لکھے گئے شاہکار ادبی خطوط، جن میں چائے کی پیالی، صبح کے منظر اور زندگی کے فلسفے کو منفرد اسلوب میں بیان کیا گیا ہے۔',
+                chapters: [
+                    {
+                        title: 'خط اول: صبحِ صادق اور چائے کی پیالی',
+                        content: `صدیقِ مکرم!\n\nصبح کا وقت ہے، چار بجے ہیں۔ ابھی پو پھٹنے میں دیر ہے، مگر مشرق کے افق پر سفیدی کی ہلکی سی لکیر نمودار ہو چکی ہے۔ قلعہ کی فصیل پر پرندوں کی چہچہاہٹ شروع ہو گئی ہے اور میری میز پر چینی کی پیالی میں سبز چائے کی بھاپ اٹھ رہی ہے۔\n\nانسان کی زندگی میں تنہائی کے لمحات اگر غور و فکر اور مطالعہ سے آراستہ ہو جائیں تو قید خانے کی دیواریں بھی علم و حکمت کا دبستان بن جاتی ہیں۔`
+                    },
+                    {
+                        title: 'خط دوم: چڑیا چڑے کی کہانی اور فطرت کا مشاہدہ',
+                        content: `زندگی کی مسرتیں بڑی بڑی محفلوں کی محتاج نہیں ہوتیں۔ اگر آنکھ دیکھنے والی ہو تو صحن میں اترنے والی ننھی چڑیوں کی چہچہاہٹ اور پھولوں کی کھلتی ہوئی کلیوں میں بھی کائنات کا حسن سمٹا ہوا نظر آتا ہے۔`
+                    }
+                ],
+                createdAt: 1700000009500
+            },
+            {
+                id: 'seed-ar-1',
+                title: 'مقدمة ابن خلدون — في عمران العالم وعلم التاريخ',
+                author: 'عبد الرحمن بن خلدون',
+                language: 'Arabic',
+                type: 'Book',
+                category: 'History',
+                coverTheme: 'emerald',
+                year: '1377 م',
+                likes: 54,
+                summary: 'من أعظم ما كُتب في فلسفة التاريخ وعلم الاجتماع الإنساني، يبين فيه ابن خلدون قواعد نقد الأخبار وطبائع العمران البشري.',
+                chapters: [
+                    {
+                        title: 'الفصل الأول: في فضل علم التاريخ وتحقيق مذاهبه',
+                        content: `اعلم أن فن التاريخ فن عزيز المذهب، جم الفوائد، شريف الغاية؛ إذ هو يوقفنا على أحوال الماضين من الأمم في أخلاقهم، والأنبياء في سيرهم، والملوك في دولهم وسياستهم، حتى تتم فائدة الاقتداء في ذلك لمن يرومه في أحوال الدين والدنيا.\n\nوهو في ظاهره لا يزيد على أخبار عن الأيام والدول، والسوابق من القرون الأول، وفي باطنه نظر وتحقيق، وتعليل للكائنات ومبادئها دقيق، وعلم بكيفيات الوقائع وأسبابها عميق.`
+                    },
+                    {
+                        title: 'الفصل الثاني: في وجوب تمحيص الأخبار والروايات',
+                        content: `إذا اعتمد المؤرخ في نقله على مجرد النقل ولم يحكّم أصول العادة وقواعد السياسة وطبيعة العمران والأحوال في الاجتماع الإنساني، فربما لم يأمن العثور ومزلة القدم والحيد عن جادة الصدق.`
+                    }
+                ],
+                createdAt: 1700000009000
+            },
+            {
+                id: 'seed-ar-2',
+                title: 'البيان والتبيين — أسرار البلاغة وفصاحة اللسان',
+                author: 'أبو عثمان عمرو بن بحر الجاحظ',
+                language: 'Arabic',
+                type: 'Book',
+                category: 'Grammar & Rhetoric',
+                coverTheme: 'sapphire',
+                year: 'القرن الثالث الهجري',
+                likes: 39,
+                summary: 'كتاب مؤسس في البلاغة العربية والنقد الأدبي، يتناول شرف البيان، ومطابقة الكلام لمقتضى الحال، وحسن الإيجاز.',
+                chapters: [
+                    {
+                        title: 'الباب الأول: تعريف البيان ومكانة الفصاحة',
+                        content: `قال الجاحظ رحمه الله: ومدار الأمر والغاية التي يجري إليها القائل والسامع إنما هو الفهم والإفهام؛ فبأي شيء بلغت الإفهام وأوضحت عن المعنى، فذلك هو البيان في ذلك الموضع.\n\nوخير الكلام ما كان قليله يغنيك عن كثيره، ومعناه في ظاهر لفظه، فإذا ألبسته المعاني الشريفة ألفاظاً رشيقة عذبة، وقع في القلب موقع الغيث من الأرض الجدبة.`
+                    },
+                    {
+                        title: 'الباب الثاني: لكل مقام مقال',
+                        content: `وينبغي للمتكلم أن يعرف أقدار المعاني، ويوازن بينها وبين أقدار المستمعين، وبين أقدار الحالات، فيجعل لكل طبقة من ذلك كلاماً، ولكل حالة من ذلك مقاماً.`
+                    }
+                ],
+                createdAt: 1700000008500
+            },
+            {
+                id: 'seed-en-1',
+                title: 'Meditations — The Inner Citadel & Stoic Wisdom',
+                author: 'Marcus Aurelius',
+                language: 'English',
+                type: 'Book',
+                category: 'Philosophy & Ethics',
+                coverTheme: 'burgundy',
+                year: '180 CE',
+                likes: 45,
+                summary: 'Timeless reflections on self-mastery, clarity of thought, duty, and inner tranquility written by the philosopher-emperor.',
+                chapters: [
+                    {
+                        title: 'Book IV — Retreat Into Your Own Soul',
+                        content: `Men seek retreats for themselves, houses in the country, seashores, and mountains; and thou too art wont to desire such things very much. Yet this is altogether a mark of the most common sort of men, for it is in thy power whenever thou shalt choose to retire into thyself.\n\nNowhere either with more quiet or more freedom from trouble does a man retire than into his own soul, particularly when he has within him such thoughts that by looking into them he is immediately in perfect tranquility.`
+                    },
+                    {
+                        title: 'Book V — Morning Purpose & Duty',
+                        content: `At dawn, when you have trouble getting out of bed, tell yourself: "I have to go to work — as a human being. What do I have to complain of, if I'm going to do what I was born for — the things I was brought into the world to do?"`
+                    }
+                ],
+                createdAt: 1700000008000
+            },
+            {
+                id: 'seed-ur-3',
+                title: 'سیرت النبی ﷺ اور علمِ تاریخ کے اصول',
+                author: 'علامہ شبلی نعمانی',
+                language: 'Urdu',
+                type: 'Article',
+                category: 'History',
+                coverTheme: 'emerald',
+                year: '1914',
+                likes: 51,
+                summary: 'تاریخی واقعات کی تحقیق، درایت و روایت کے اصول اور مستند سوانح نگاری کے معیار پر علامہ شبلی نعمانی کا فکر انگیز مضمون۔',
+                content: `تاریخ اور سوانح نگاری کا سب سے اہم اصول یہ ہے کہ کسی واقعے کو محض نقل کر دینے پر اکتفا نہ کیا جائے بلکہ عقلِ سلیم، تاریخی تسلسل اور مستند شواہد کی کسوٹی پر پرکھا جائے۔\n\nعلامہ شبلی نعمانی نے برصغیر میں جدید تحقیقی اسلوب کی بنیاد رکھی، جس میں زبان کی شگفتگی کے ساتھ ساتھ استدلال کی قوت اور حوالہ جات کی صحت کو بنیادی حیثیت حاصل ہے۔\n\nجب علمِ تاریخ کو دیانت اور تحقیق کے ساتھ لکھا جاتا ہے تو وہ آنے والی نسلوں کے لیے مشعلِ راہ بن جاتا ہے۔`,
+                createdAt: 1700000007500
+            },
+            {
+                id: 'seed-ar-3',
+                title: 'ديوان المتنبي — مختارات في العزيمة والحكمة',
+                author: 'أبو الطيب أحمد بن الحسين المتنبي',
+                language: 'Arabic',
+                type: 'Article',
+                category: 'Poetry',
+                coverTheme: 'gold',
+                year: 'القرن الرابع الهجري',
+                likes: 47,
+                summary: 'أشهر قصائد الحكمة والطموح في الشعر العربي، حيث تجتمع جزالة اللفظ وعلو الهمة في أبيات خالدة.',
+                content: `عَلَى قَدْرِ أَهْلِ العَزْمِ تَأْتِي العَزَائِمُ\nوَتَأْتِي عَلَى قَدْرِ الكِرَامِ المَكَارِمُ\n\nوَتَعْظُمُ فِي عَيْنِ الصَّغِيرِ صِغَارُهَا\nوَتَصْغُرُ فِي عَيْنِ العَظِيمِ العَظَائِمُ\n\nإِذَا غَامَرْتَ فِي شَرَفٍ مَرُومٍ\nفَلَا تَقْنَعْ بِمَا دُونَ النُّجُومِ\n\nشرح موجز:\nيؤكد المتنبي في هذه الأبيات الخالدة أن الإنجازات العظيمة لا تتحقق إلا لأصحاب الإرادة القوية والهمم العالية الذين لا يرضون بالدون.`,
+                createdAt: 1700000007000
+            },
+            {
+                id: 'seed-ur-4',
+                title: 'مضامینِ سرسید: تہذیب الاخلاق اور تعلیم کی اہمیت',
+                author: 'سر سید احمد خان',
+                language: 'Urdu',
+                type: 'Article',
+                category: 'Self-Improvement',
+                coverTheme: 'sapphire',
+                year: '1871',
+                likes: 36,
+                summary: 'جدید علوم کے حصول، سائنسی شعور اور سماجی اصلاح کے موضوع پر سر سید احمد خان کا سادہ اور پر اثر مضمون۔',
+                content: `کسی قوم کی حقیقی ترقی کا دارومدار اس کی تعلیمی بیداری اور اخلاقی بلندی پر ہوتا ہے۔ جب تک ہم پرانی فرسودہ رسموں کو چھوڑ کر علم، تحقیق اور محنت کو اپنا شعار نہیں بناتے، اس وقت تک زمانے کے ساتھ قدم ملا کر چلنا ممکن نہیں۔\n\nتہذیب الاخلاق کا مقصد یہی تھا کہ اہلِ وطن میں مطالعہ کا ذوق پیدا ہو اور وہ سادہ، عام فہم اور مدلل اردو نثر کے ذریعے جدید دنیا کے علوم سے روشناس ہوں۔`,
+                createdAt: 1700000006500
+            },
+            {
+                id: 'seed-ar-4',
+                title: 'أهمية النحو العربي في صيانة اللسان وفهم التراث',
+                author: 'د. عبد الرحمن السعدي',
+                language: 'Arabic',
+                type: 'Article',
+                category: 'Grammar & Rhetoric',
+                coverTheme: 'emerald',
+                year: 'دراسة لغوية',
+                likes: 33,
+                summary: 'مقال علمي يوضح كيف يحفظ علم النحو سلامة المعنى، ويكشف دقائق الأساليب في اللغة العربية.',
+                content: `إن علم النحو هو ميزان اللغة العربية وقانونها الذي يحفظ اللسان من اللحن والخطأ، ويعين القارئ على إدراك الفروق الدقيقة بين المعاني.\n\nفالحركة الإعرابية الواحدة قد تغير المعنى من الفاعلية إلى المفعولية، ومن النفي إلى الإثبات، ولذلك قيل: "النحو في الكلام كالملح في الطعام".\n\nومن أتقن مبادئ النحو والصرف انفتحت له أبواب فهم النصوص الأدبية والتاريخية، واستطاع التعبير عن أفكاره بوضوح وقوة وأصالة.`,
+                createdAt: 1700000006000
+            },
+            {
+                id: 'seed-en-2',
+                title: 'The Art of Clear Writing & Structured Thinking',
+                author: 'Altaf Khan & Eleanor Vance',
+                language: 'English',
+                type: 'Article',
+                category: 'Grammar & Rhetoric',
+                coverTheme: 'gold',
+                year: '2026 Edition',
+                likes: 41,
+                summary: 'Practical principles for organizing complex ideas into crisp, memorable prose across scholarly and creative writing.',
+                content: `Clear writing is rarely the result of an ornate vocabulary; rather, it is the visible trace of clear thinking.\n\n1. Begin with the core thesis: Before drafting a paragraph, state in a single plain sentence what the reader should understand by the end of it.\n\n2. Prefer active verbs: Active constructions carry momentum and precision, whereas excessive passive phrasing obscures responsibility and slows comprehension.\n\n3. Edit for rhythm and brevity: Read your prose aloud. Wherever you stumble or run out of breath, divide the sentence and trim redundant modifiers.`,
+                createdAt: 1700000005500
+            }
+        ];
+
+        // Trilingual UI Dictionary
+        const UI_STRINGS = {
+            en: {
+                subtitle: 'Multilingual Books & Articles Archive',
+                uploadBtn: 'Publish Book / Article',
+                heroBadge: 'Founded & Curated by Altaf Khan • Open Knowledge Repository',
+                heroTitle: 'Read, Study & Publish Across Three Great Traditions',
+                heroDesc: 'Explore multi-chapter classics, poetry, history, and scholarly essays in English, Urdu, and Arabic—or publish your own books directly into the archive.',
+                searchPlaceholder: 'Search title, author, chapter, or topic in English, اردو, or العربية...',
+                statTotal: 'Total Works',
+                statBooks: 'Multi-Chapter Books',
+                statArticles: 'Articles & Essays',
+                statSaved: 'Saved Bookmarks'
+            },
+            ur: {
+                subtitle: 'کثیر اللسانی ڈیجیٹل کتب خانہ و اشاعت گاہ',
+                uploadBtn: 'کتاب / مضمون شائع کریں',
+                heroBadge: 'بانی و مدیر: الطاف خان (Altaf Khan) • علمی ذخیرہ',
+                heroTitle: 'تین عظیم علمی روایات میں مطالعہ اور اشاعت کا مرکز',
+                heroDesc: 'اردو، عربی اور انگریزی میں کلاسیکی کتب، شاعری، تاریخ اور تحقیقی مضامین پڑھیں یا اپنی تحریریں براہِ راست لائبریری میں شائع کریں۔',
+                searchPlaceholder: 'عنوان، مصنف یا موضوع تلاش کریں (اردو، العربية، English)...',
+                statTotal: 'کل کتب و مضامین',
+                statBooks: 'مکمل کتابیں',
+                statArticles: 'علمی مضامین',
+                statSaved: 'محفوظ شدہ فہرست'
+            },
+            ar: {
+                subtitle: 'مكتبة رقمية متعددة اللغات ومنصة نشر مفتوحة',
+                uploadBtn: 'انشر كتاباً أو مقالاً',
+                heroBadge: 'تأسيس وإشراف: ألطاف خان (Altaf Khan) • مستودع المعرفة',
+                heroTitle: 'اقرأ وادرس وانشر عبر ثلاث حضارات لغوية عريقة',
+                heroDesc: 'تصفح أمهات الكتب، والشعر، والتاريخ، والمقالات العلمية بالعربية والأردية والإنجليزية — أو انشر مؤلفاتك مباشرة في المكتبة.',
+                searchPlaceholder: 'ابحث عن عنوان أو مؤلف أو موضوع بالعربية أو اردو أو English...',
+                statTotal: 'إجمالي المؤلفات',
+                statBooks: 'الكتب ذات الفصول',
+                statArticles: 'المقالات والأبحاث',
+                statSaved: 'المحفوظات'
+            }
+        };
+
+        // Application State
+        let userWorks = [];
+        let activeLang = 'all';
+        let activeType = 'all';
+        let savedOnly = false;
+        let currentUiLang = 'en';
+
+        // Reader State
+        let activeWorkId = null;
+        let activeChapterIndex = 0;
+        let currentReaderFontSize = 19;
+        let currentLineSpacing = 1.9;
+        let pendingFileAttachment = null;
+        let pendingCoverImage = '';
+        let selectedCoverTheme = 'emerald';
+
+        // Local Bookmarks, Likes & Notes State (Synced in-memory + localStorage fallback for personal preferences)
+        let savedBookmarks = new Set(JSON.parse(localStorage.getItem('maktaba_bookmarks') || '[]'));
+        let userLikedIds = new Set(JSON.parse(localStorage.getItem('maktaba_likes') || '[]'));
+        let localNotesMap = JSON.parse(localStorage.getItem('maktaba_notes') || '{}');
+
+        // Firebase Variables
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maktaba-tul-ilm-default';
+
+        // Initialize Firebase & Auth
+        async function initLibraryCloud() {
+            const syncDot = document.getElementById('syncDot');
+            const syncText = document.getElementById('syncText');
+
+            try {
+                if (typeof __firebase_config === 'undefined') {
+                    throw new Error('Firebase config unavailable');
+                }
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // RULE 3: Authenticate BEFORE Firestore queries
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                currentUser = auth.currentUser;
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                });
+
+                if (syncDot && syncText) {
+                    syncDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+                    syncText.textContent = 'Live Cloud Library';
+                }
+
+                // RULE 1 & RULE 2: Strict public artifact path, simple collection query
+                const worksColRef = collection(db, 'artifacts', appId, 'public', 'data', 'library_items');
+                onSnapshot(
+                    worksColRef,
+                    (snapshot) => {
+                        const fetched = [];
+                        snapshot.forEach((docSnap) => {
+                            fetched.push({ id: docSnap.id, ...docSnap.data() });
+                        });
+                        fetched.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                        userWorks = fetched;
+                        updateAnalyticsBar();
+                        renderLibrary();
+                    },
+                    (err) => {
+                        console.error('Firestore listener error:', err);
+                        if (syncText) syncText.textContent = 'Session Mode';
+                    }
+                );
+            } catch (error) {
+                console.warn('Running in local session mode:', error.message);
+                if (syncDot && syncText) {
+                    syncDot.className = 'w-2 h-2 rounded-full bg-goldAccent';
+                    syncText.textContent = 'Session Mode';
+                }
+                updateAnalyticsBar();
+                renderLibrary();
+            }
+        }
+
+        function getAllWorks() {
+            return [...userWorks, ...CURATED_WORKS];
+        }
+
+        function getScriptMeta(language) {
+            if (language === 'Urdu') {
+                return { dir: 'rtl', fontClass: 'font-urdu', badgeLabel: 'اردو • Urdu', alignClass: 'text-right' };
+            }
+            if (language === 'Arabic') {
+                return { dir: 'rtl', fontClass: 'font-arabic', badgeLabel: 'العربية • Arabic', alignClass: 'text-right' };
+            }
+            return { dir: 'ltr', fontClass: 'font-serif', badgeLabel: 'English', alignClass: 'text-left' };
+        }
+
+        function getCoverGradient(theme) {
+            const map = {
+                emerald: 'from-emerald-800 via-emerald-900 to-teal-950',
+                gold: 'from-amber-600 via-amber-800 to-stone-900',
+                burgundy: 'from-rose-800 via-red-900 to-stone-950',
+                sapphire: 'from-sky-800 via-blue-950 to-slate-950'
+            };
+            return map[theme] || map.emerald;
+        }
+
+        function estimateReadTime(item) {
+            let fullText = item.content || '';
+            if (Array.isArray(item.chapters)) {
+                fullText = item.chapters.map(c => c.content).join(' ');
+            }
+            const words = fullText.trim().split(/\s+/).filter(Boolean).length;
+            const mins = Math.max(1, Math.ceil(words / 180));
+            return `${mins} min read`;
+        }
+
+        // Trilingual Interface Toggle
+        window.setInterfaceLang = function (lang) {
+            currentUiLang = lang;
+            const str = UI_STRINGS[lang] || UI_STRINGS.en;
+
+            document.querySelectorAll('.ui-lang-btn').forEach(btn => {
+                if (btn.dataset.uilang === lang) {
+                    btn.classList.add('bg-goldAccent', 'text-inkDark');
+                    btn.classList.remove('text-emerald-100');
+                } else {
+                    btn.classList.remove('bg-goldAccent', 'text-inkDark');
+                    btn.classList.add('text-emerald-100');
+                }
+            });
+
+            document.getElementById('uiSubtitle').textContent = str.subtitle;
+            document.getElementById('uiUploadBtnText').textContent = str.uploadBtn;
+            document.getElementById('uiHeroBadge').textContent = str.heroBadge;
+            document.getElementById('uiHeroTitle').textContent = str.heroTitle;
+            document.getElementById('uiHeroDesc').textContent = str.heroDesc;
+            document.getElementById('searchInput').placeholder = str.searchPlaceholder;
+            document.getElementById('uiStatTotal').textContent = str.statTotal;
+            document.getElementById('uiStatBooks').textContent = str.statBooks;
+            document.getElementById('uiStatArticles').textContent = str.statArticles;
+            document.getElementById('uiStatSaved').textContent = str.statSaved;
+        };
+
+        function updateAnalyticsBar() {
+            const all = getAllWorks();
+            document.getElementById('statTotalWorks').textContent = all.length;
+            document.getElementById('statTotalBooks').textContent = all.filter(w => w.type === 'Book').length;
+            document.getElementById('statTotalArticles').textContent = all.filter(w => w.type === 'Article').length;
+            document.getElementById('statSavedCount').textContent = savedBookmarks.size;
+        }
+
+        // Render Cards to Grid
+        window.renderLibrary = function () {
+            const grid = document.getElementById('libraryGrid');
+            const emptyState = document.getElementById('emptyState');
+            const resultsCount = document.getElementById('resultsCount');
+            const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            const selectedCat = document.getElementById('categoryFilter').value;
+            const sortBy = document.getElementById('sortFilter').value;
+
+            const allItems = getAllWorks();
+
+            let filtered = allItems.filter((item) => {
+                const matchesLang = activeLang === 'all' || item.language === activeLang;
+                const matchesType = activeType === 'all' || item.type === activeType;
+                const matchesCat = selectedCat === 'all' || item.category === selectedCat;
+                const matchesSaved = !savedOnly || savedBookmarks.has(item.id);
+
+                const chapterText = Array.isArray(item.chapters)
+                    ? item.chapters.map(c => `${c.title} ${c.content}`).join(' ').toLowerCase()
+                    : '';
+
+                const matchesSearch =
+                    !searchQuery ||
+                    (item.title && item.title.toLowerCase().includes(searchQuery)) ||
+                    (item.author && item.author.toLowerCase().includes(searchQuery)) ||
+                    (item.summary && item.summary.toLowerCase().includes(searchQuery)) ||
+                    (item.category && item.category.toLowerCase().includes(searchQuery)) ||
+                    chapterText.includes(searchQuery);
+
+                return matchesLang && matchesType && matchesCat && matchesSaved && matchesSearch;
+            });
+
+            // Sorting
+            if (sortBy === 'liked') {
+                filtered.sort((a, b) => ((b.likes || 0) + (userLikedIds.has(b.id) ? 1 : 0)) - ((a.likes || 0) + (userLikedIds.has(a.id) ? 1 : 0)));
+            } else if (sortBy === 'alpha') {
+                filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+            }
+
+            resultsCount.textContent = `Showing ${filtered.length} ${filtered.length === 1 ? 'work' : 'works'}`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map((item) => {
+                const meta = getScriptMeta(item.language);
+                const isUserUploaded = !item.id.startsWith('seed-');
+                const isBookmarked = savedBookmarks.has(item.id);
+                const totalLikes = (item.likes || 0) + (userLikedIds.has(item.id) ? 1 : 0);
+                const chapCount = Array.isArray(item.chapters) ? item.chapters.length : 0;
+                const gradient = getCoverGradient(item.coverTheme);
+
+                const typeBadgeText = item.language === 'Urdu'
+                    ? (item.type === 'Book' ? `کتاب (${chapCount || 1} ابواب)` : 'مضمون')
+                    : item.language === 'Arabic'
+                        ? (item.type === 'Book' ? `كتاب (${chapCount || 1} فصول)` : 'مقال')
+                        : (item.type === 'Book' ? `Book • ${chapCount || 1} Ch.` : 'Article');
+
+                return `
+                    <article onclick="openReaderById('${item.id}')" class="card-hover bg-white rounded-2xl border border-amber-900/12 flex flex-col justify-between cursor-pointer relative overflow-hidden group">
+                        
+                        <!-- Decorative Manuscript Cover Header -->
+                        <div class="relative h-28 bg-gradient-to-r ${gradient} p-4 flex flex-col justify-between text-white overflow-hidden">
+                            ${item.coverImage ? `<img src="${item.coverImage}" alt="Cover" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition duration-500">` : ''}
+                            <div class="relative z-10 flex items-center justify-between gap-2">
+                                <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-black/35 backdrop-blur-xs border border-white/15">
+                                    ${meta.badgeLabel}
+                                </span>
+                                <div class="flex items-center gap-1.5">
+                                    ${isUserUploaded ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-goldAccent text-inkDark">Community</span>` : ''}
+                                    <button onclick="event.stopPropagation(); toggleCardBookmark('${item.id}')" class="p-1.5 rounded-lg bg-black/30 hover:bg-black/50 text-white transition cursor-pointer" title="Save Bookmark">
+                                        <i data-lucide="bookmark" class="w-3.5 h-3.5 ${isBookmarked ? 'fill-goldAccent text-goldAccent' : 'text-white'}"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="relative z-10 flex items-center justify-between text-[11px] text-white/90">
+                                <span class="bg-white/15 px-2 py-0.5 rounded-md font-medium">${typeBadgeText}</span>
+                                <span>${estimateReadTime(item)}</span>
+                            </div>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div dir="${meta.dir}" class="${meta.alignClass}">
+                                <h3 class="${meta.fontClass} text-lg sm:text-xl font-bold text-inkDark group-hover:text-emeraldDeep transition mb-1.5 line-clamp-2">
+                                    ${escapeHTML(item.title)}
+                                </h3>
+                                <p class="${item.language !== 'English' ? meta.fontClass : 'font-sans'} text-xs sm:text-sm font-semibold text-emeraldDeep mb-2.5">
+                                    ${escapeHTML(item.author)}
+                                </p>
+                                <p class="${item.language !== 'English' ? meta.fontClass : 'font-sans'} text-xs sm:text-sm text-inkMuted line-clamp-3 mb-4">
+                                    ${escapeHTML(item.summary)}
+                                </p>
+                            </div>
+
+                            <!-- Card Footer -->
+                            <div class="pt-3 border-t border-amber-900/10 flex items-center justify-between text-xs">
+                                <span class="text-inkMuted font-medium truncate max-w-[55%]">${escapeHTML(item.category)}</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="inline-flex items-center gap-1 text-rose-600 font-semibold">
+                                        <i data-lucide="heart" class="w-3.5 h-3.5 ${userLikedIds.has(item.id) ? 'fill-rose-600' : ''}"></i>
+                                        <span>${totalLikes}</span>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 font-bold text-emeraldDeep group-hover:translate-x-0.5 transition">
+                                        ${item.fileName ? '<i data-lucide="paperclip" class="w-3.5 h-3.5 text-goldAccent"></i>' : ''}
+                                        <span>Read</span>
+                                        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            if (window.lucide) lucide.createIcons();
+        };
+
+        // Card Bookmark Action
+        window.toggleCardBookmark = function (id) {
+            if (savedBookmarks.has(id)) {
+                savedBookmarks.delete(id);
+                showToast('Removed from saved reading list');
+            } else {
+                savedBookmarks.add(id);
+                showToast('Saved to your reading list!');
+            }
+            localStorage.setItem('maktaba_bookmarks', JSON.stringify([...savedBookmarks]));
+            updateAnalyticsBar();
+            renderLibrary();
+        };
+
+        // Filter Actions
+        window.setLanguageFilter = function (lang) {
+            activeLang = lang;
+            document.querySelectorAll('.lang-tab').forEach((btn) => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('bg-emeraldDeep', 'text-white');
+                    btn.classList.remove('text-inkMuted', 'hover:bg-parchmentDark');
+                } else {
+                    btn.classList.remove('bg-emeraldDeep', 'text-white');
+                    btn.classList.add('text-inkMuted', 'hover:bg-parchmentDark');
+                }
+            });
+            renderLibrary();
+        };
+
+        window.toggleSavedOnlyFilter = function () {
+            savedOnly = !savedOnly;
+            const btn = document.getElementById('savedOnlyBtn');
+            if (savedOnly) {
+                btn.classList.add('bg-goldLight', 'text-inkDark', 'border-goldAccent');
+                btn.classList.remove('text-inkMuted');
+            } else {
+                btn.classList.remove('bg-goldLight', 'text-inkDark', 'border-goldAccent');
+                btn.classList.add('text-inkMuted');
+            }
+            renderLibrary();
+        };
+
+        window.setTypeFilter = function (type) {
+            activeType = type;
+            document.querySelectorAll('.type-tab').forEach((btn) => {
+                if (btn.dataset.type === type) {
+                    btn.classList.add('bg-white', 'text-emeraldDeep', 'shadow-sm');
+                    btn.classList.remove('text-inkMuted');
+                } else {
+                    btn.classList.remove('bg-white', 'text-emeraldDeep', 'shadow-sm');
+                    btn.classList.add('text-inkMuted');
+                }
+            });
+            renderLibrary();
+        };
+
+        window.handleFilterChange = function () {
+            const searchVal = document.getElementById('searchInput').value;
+            const clearBtn = document.getElementById('clearSearchBtn');
+            clearBtn.classList.toggle('hidden', searchVal.length === 0);
+            renderLibrary();
+        };
+
+        window.clearSearch = function () {
+            document.getElementById('searchInput').value = '';
+            handleFilterChange();
+        };
+
+        window.resetAllFilters = function () {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('sortFilter').value = 'newest';
+            savedOnly = false;
+            document.getElementById('savedOnlyBtn').classList.remove('bg-goldLight', 'text-inkDark', 'border-goldAccent');
+            setLanguageFilter('all');
+            setTypeFilter('all');
+            handleFilterChange();
+        };
+
+        // =====================================================================
+        // ADVANCED READER MODAL LOGIC
+        // =====================================================================
+        window.openReaderById = function (id) {
+            const item = getAllWorks().find((w) => w.id === id);
+            if (!item) return;
+
+            stopSpeechIfActive();
+            activeWorkId = id;
+            activeChapterIndex = 0;
+
+            const meta = getScriptMeta(item.language);
+            const readerModal = document.getElementById('readerModal');
+            const headerBlock = document.getElementById('readerHeaderBlock');
+            const titleEl = document.getElementById('readerTitle');
+            const authorEl = document.getElementById('readerAuthor');
+            const summaryEl = document.getElementById('readerSummary');
+
+            // Top Badges
+            document.getElementById('readerLangBadge').textContent = meta.badgeLabel;
+            document.getElementById('readerTypeBadge').textContent = item.type;
+            document.getElementById('readerCatBadge').textContent = item.category;
+            document.getElementById('readerYearBadge').textContent = item.year ? `• ${item.year}` : '• Community Edition';
+            document.getElementById('readerReadTime').querySelector('span').textContent = estimateReadTime(item);
+
+            // Header Direction & Typography
+            headerBlock.setAttribute('dir', meta.dir);
+            headerBlock.className = `border-b border-amber-900/15 pb-6 ${meta.alignClass}`;
+
+            titleEl.className = `${meta.fontClass} text-2xl sm:text-4xl font-bold mb-2 leading-snug`;
+            titleEl.textContent = item.title;
+
+            authorEl.className = `${item.language !== 'English' ? meta.fontClass : 'font-sans'} text-sm sm:text-base text-emeraldDeep font-semibold`;
+            authorEl.textContent = item.language === 'English' ? `By ${item.author}` : item.author;
+
+            summaryEl.className = `${item.language !== 'English' ? meta.fontClass : 'font-sans'} mt-3 text-sm opacity-85 italic bg-black/5 p-3.5 rounded-xl border border-amber-900/10`;
+            summaryEl.textContent = item.summary;
+
+            // Multi-chapter vs Single Content Setup
+            const hasChapters = Array.isArray(item.chapters) && item.chapters.length > 0;
+            const toggleChapBtn = document.getElementById('toggleChaptersBtn');
+            const chapSidebar = document.getElementById('chapterSidebar');
+
+            if (hasChapters) {
+                toggleChapBtn.classList.remove('hidden');
+                toggleChapBtn.classList.add('inline-flex');
+                if (window.innerWidth >= 768) {
+                    chapSidebar.classList.remove('hidden');
+                    chapSidebar.classList.add('flex');
+                }
+                renderChapterSidebar(item);
+            } else {
+                toggleChapBtn.classList.add('hidden');
+                toggleChapBtn.classList.remove('inline-flex');
+                chapSidebar.classList.add('hidden');
+                chapSidebar.classList.remove('flex');
+            }
+
+            renderActiveChapterContent(item);
+
+            // Attachment Handling (including inline PDF preview)
+            const attachmentBox = document.getElementById('readerAttachmentBox');
+            const pdfPreviewBtn = document.getElementById('togglePdfPreviewBtn');
+            const pdfFrame = document.getElementById('inlinePdfFrame');
+            pdfFrame.classList.add('hidden');
+
+            if (item.fileDataUrl && item.fileName) {
+                attachmentBox.classList.remove('hidden');
+                document.getElementById('readerFileName').textContent = item.fileName;
+                const dlLink = document.getElementById('readerDownloadLink');
+                dlLink.href = item.fileDataUrl;
+                dlLink.download = item.fileName;
+
+                if (item.fileName.toLowerCase().endsWith('.pdf')) {
+                    pdfPreviewBtn.classList.remove('hidden');
+                    pdfFrame.src = item.fileDataUrl;
+                } else {
+                    pdfPreviewBtn.classList.add('hidden');
+                }
+            } else {
+                attachmentBox.classList.add('hidden');
+            }
+
+            updateReaderLikeAndBookmarkUI(item);
+            renderReaderNotes(item.id);
+
+            document.getElementById('readerScrollArea').scrollTop = 0;
+            document.getElementById('readerProgressBar').style.width = '0%';
+            readerModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (window.lucide) lucide.createIcons();
+        };
+
+        function renderChapterSidebar(item) {
+            const meta = getScriptMeta(item.language);
+            const container = document.getElementById('chapterListContainer');
+            document.getElementById('chapterCountBadge').textContent = item.chapters.length;
+
+            container.innerHTML = item.chapters.map((ch, idx) => {
+                const isActive = idx === activeChapterIndex;
+                return `
+                    <button onclick="selectChapter(${idx})" dir="${meta.dir}" class="w-full ${meta.alignClass} px-3 py-2.5 rounded-xl text-xs sm:text-sm transition cursor-pointer flex items-center justify-between gap-2 ${isActive ? 'bg-emeraldDeep text-white font-semibold shadow-xs' : 'hover:bg-black/5 opacity-85'}">
+                        <span class="${item.language !== 'English' ? meta.fontClass : 'font-sans'} truncate">${escapeHTML(ch.title)}</span>
+                        <span class="text-[10px] opacity-70 shrink-0">#${idx + 1}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function renderActiveChapterContent(item) {
+            const meta = getScriptMeta(item.language);
+            const contentEl = document.getElementById('readerContent');
+            const activeBanner = document.getElementById('activeChapterBanner');
+            const bottomNav = document.getElementById('bottomChapterNav');
+
+            contentEl.setAttribute('dir', meta.dir);
+            contentEl.className = `${meta.fontClass} ${meta.alignClass} whitespace-pre-line`;
+
+            if (Array.isArray(item.chapters) && item.chapters.length > 0) {
+                const chap = item.chapters[activeChapterIndex] || item.chapters[0];
+                activeBanner.classList.remove('hidden');
+                bottomNav.classList.remove('hidden');
+
+                const chapTitleEl = document.getElementById('activeChapterTitle');
+                chapTitleEl.className = `${meta.fontClass} text-base sm:text-lg font-bold`;
+                chapTitleEl.textContent = chap.title;
+
+                contentEl.textContent = chap.content;
+
+                const isFirst = activeChapterIndex === 0;
+                const isLast = activeChapterIndex >= item.chapters.length - 1;
+                document.getElementById('prevChapBtn').disabled = isFirst;
+                document.getElementById('bottomPrevChapBtn').disabled = isFirst;
+                document.getElementById('nextChapBtn').disabled = isLast;
+                document.getElementById('bottomNextChapBtn').disabled = isLast;
+
+                renderChapterSidebar(item);
+            } else {
+                activeBanner.classList.add('hidden');
+                bottomNav.classList.add('hidden');
+                contentEl.textContent = item.content || '';
+            }
+        }
+
+        window.selectChapter = function (idx) {
+            const item = getAllWorks().find(w => w.id === activeWorkId);
+            if (!item || !item.chapters) return;
+            stopSpeechIfActive();
+            activeChapterIndex = idx;
+            renderActiveChapterContent(item);
+            document.getElementById('readerScrollArea').scrollTop = 0;
+        };
+
+        window.navigateChapter = function (delta) {
+            const item = getAllWorks().find(w => w.id === activeWorkId);
+            if (!item || !item.chapters) return;
+            const nextIdx = activeChapterIndex + delta;
+            if (nextIdx >= 0 && nextIdx < item.chapters.length) {
+                selectChapter(nextIdx);
+            }
+        };
+
+        window.toggleChapterSidebar = function () {
+            const sidebar = document.getElementById('chapterSidebar');
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('flex');
+        };
+
+        window.toggleInlinePdfViewer = function () {
+            const frame = document.getElementById('inlinePdfFrame');
+            frame.classList.toggle('hidden');
+        };
+
+        window.closeReaderModal = function () {
+            stopSpeechIfActive();
+            document.getElementById('readerModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+
+        window.updateReaderScrollProgress = function () {
+            const el = document.getElementById('readerScrollArea');
+            const maxScroll = el.scrollHeight - el.clientHeight;
+            const pct = maxScroll > 0 ? Math.min(100, Math.round((el.scrollTop / maxScroll) * 100)) : 0;
+            document.getElementById('readerProgressBar').style.width = `${pct}%`;
+        };
+
+        window.adjustReaderFont = function (delta) {
+            currentReaderFontSize = Math.min(32, Math.max(15, currentReaderFontSize + delta));
+            document.getElementById('readerContent').style.fontSize = `${currentReaderFontSize}px`;
+            document.getElementById('fontSizeIndicator').textContent = `${currentReaderFontSize}px`;
+        };
+
+        window.cycleLineSpacing = function () {
+            const spacings = [1.7, 2.0, 2.4];
+            const nextIdx = (spacings.indexOf(currentLineSpacing) + 1) % spacings.length;
+            currentLineSpacing = spacings[nextIdx];
+            document.getElementById('readerContent').style.lineHeight = String(currentLineSpacing);
+            showToast(`Line spacing adjusted (${currentLineSpacing}x)`);
+        };
+
+        window.setReaderTheme = function (theme) {
+            const win = document.getElementById('readerWindow');
+            win.classList.remove('reader-theme-light', 'reader-theme-sepia', 'reader-theme-dark');
+            win.classList.add(`reader-theme-${theme}`);
+        };
+
+        // Text-to-Speech Audio Reader
+        function stopSpeechIfActive() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            const label = document.getElementById('ttsLabel');
+            if (label) label.textContent = 'Listen';
+        }
+
+        window.toggleSpeechReadAloud = function () {
+            if (!('speechSynthesis' in window)) {
+                showToast('Audio read-aloud is not supported in this browser.', true);
+                return;
+            }
+            if (window.speechSynthesis.speaking) {
+                stopSpeechIfActive();
+                return;
+            }
+            const item = getAllWorks().find(w => w.id === activeWorkId);
+            const text = document.getElementById('readerContent').textContent;
+            if (!text) return;
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            if (item && item.language === 'Arabic') utterance.lang = 'ar-SA';
+            else if (item && item.language === 'Urdu') utterance.lang = 'ur-PK';
+            else utterance.lang = 'en-US';
+
+            utterance.onend = () => stopSpeechIfActive();
+            utterance.onerror = () => stopSpeechIfActive();
+
+            document.getElementById('ttsLabel').textContent = 'Stop';
+            window.speechSynthesis.speak(utterance);
+        };
+
+        // Likes & Bookmarks inside Reader
+        function updateReaderLikeAndBookmarkUI(item) {
+            const isLiked = userLikedIds.has(item.id);
+            const isSaved = savedBookmarks.has(item.id);
+            const totalLikes = (item.likes || 0) + (isLiked ? 1 : 0);
+
+            document.getElementById('readerLikeCount').textContent = totalLikes;
+            const likeIcon = document.getElementById('readerLikeIcon');
+            if (likeIcon) likeIcon.classList.toggle('fill-rose-600', isLiked);
+
+            const bmIcon = document.getElementById('readerBookmarkIcon');
+            if (bmIcon) bmIcon.classList.toggle('fill-goldAccent', isSaved);
+        }
+
+        window.toggleLikeCurrentWork = function () {
+            const item = getAllWorks().find(w => w.id === activeWorkId);
+            if (!item) return;
+
+            if (userLikedIds.has(item.id)) {
+                userLikedIds.delete(item.id);
+            } else {
+                userLikedIds.add(item.id);
+                showToast('Thank you for appreciating this work!');
+            }
+            localStorage.setItem('maktaba_likes', JSON.stringify([...userLikedIds]));
+            updateReaderLikeAndBookmarkUI(item);
+            renderLibrary();
+        };
+
+        window.toggleBookmarkCurrentWork = function () {
+            const item = getAllWorks().find(w => w.id === activeWorkId);
+            if (!item) return;
+            toggleCardBookmark(item.id);
+            updateReaderLikeAndBookmarkUI(item);
+        };
+
+        // Reader Notes & Comments
+        function renderReaderNotes(workId) {
+            const notes = localNotesMap[workId] || [];
+            const listEl = document.getElementById('readerNotesList');
+            document.getElementById('notesCountLabel').textContent = `${notes.length} ${notes.length === 1 ? 'note' : 'notes'}`;
+
+            if (notes.length === 0) {
+                listEl.innerHTML = `<p class="text-xs opacity-65 italic">No study notes yet. Be the first to share a reflection on this work!</p>`;
+                return;
+            }
+
+            listEl.innerHTML = notes.map(n => `
+                <div class="bg-black/5 p-3.5 rounded-xl border border-amber-900/10">
+                    <div class="flex items-center justify-between text-xs mb-1">
+                        <span class="font-bold text-emeraldDeep">${escapeHTML(n.author)}</span>
+                        <span class="opacity-60">${n.date}</span>
+                    </div>
+                    <p class="text-xs sm:text-sm opacity-90">${escapeHTML(n.text)}</p>
+                </div>
+            `).join('');
+        }
+
+        window.handleAddNoteSubmit = function (event) {
+            event.preventDefault();
+            if (!activeWorkId) return;
+
+            const authorVal = document.getElementById('noteReaderName').value.trim() || 'Reader';
+            const textVal = document.getElementById('noteCommentInput').value.trim();
+            if (!textVal) return;
+
+            if (!localNotesMap[activeWorkId]) localNotesMap[activeWorkId] = [];
+            localNotesMap[activeWorkId].unshift({
+                author: authorVal,
+                text: textVal,
+                date: new Date().toLocaleDateString()
+            });
+            localStorage.setItem('maktaba_notes', JSON.stringify(localNotesMap));
+            document.getElementById('noteCommentInput').value = '';
+            renderReaderNotes(activeWorkId);
+            showToast('Study note posted!');
+        };
+
+        // =====================================================================
+        // MULTI-CHAPTER UPLOAD & PUBLISHING STUDIO LOGIC
+        // =====================================================================
+        window.openUploadModal = function () {
+            document.getElementById('uploadModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            const container = document.getElementById('chaptersInputContainer');
+            if (container.children.length === 0) {
+                addChapterField();
+            }
+            toggleBookChaptersMode();
+            updateFormDirection();
+        };
+
+        window.closeUploadModal = function () {
+            document.getElementById('uploadModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+
+        window.quickFillCuratorName = function () {
+            document.getElementById('pubAuthor').value = 'Altaf Khan (الطاف خان)';
+        };
+
+        window.selectCoverTheme = function (theme) {
+            selectedCoverTheme = theme;
+            document.querySelectorAll('.cover-swatch').forEach(btn => {
+                if (btn.dataset.theme === theme) {
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-goldAccent');
+                } else {
+                    btn.classList.remove('ring-2', 'ring-offset-2', 'ring-goldAccent');
+                }
+            });
+        };
+
+        window.handleCoverImageSelect = function (event) {
+            const file = event.target.files[0];
+            const note = document.getElementById('coverStatusNote');
+            pendingCoverImage = '';
+            if (!file) {
+                note.classList.add('hidden');
+                return;
+            }
+            if (file.size > 450 * 1024) {
+                showToast('Cover image must be under 450 KB.', true);
+                event.target.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                pendingCoverImage = e.target.result;
+                note.textContent = `Cover ready: ${file.name}`;
+                note.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.toggleBookChaptersMode = function () {
+            const type = document.getElementById('pubType').value;
+            const chaptersSec = document.getElementById('chaptersBuilderSection');
+            const articleSec = document.getElementById('singleArticleSection');
+
+            if (type === 'Book') {
+                chaptersSec.classList.remove('hidden');
+                articleSec.classList.add('hidden');
+            } else {
+                chaptersSec.classList.add('hidden');
+                articleSec.classList.remove('hidden');
+            }
+        };
+
+        window.addChapterField = function () {
+            const container = document.getElementById('chaptersInputContainer');
+            const idx = container.children.length + 1;
+            const lang = document.getElementById('pubLanguage').value;
+            const meta = getScriptMeta(lang);
+
+            const div = document.createElement('div');
+            div.className = 'chapter-entry bg-parchment p-3.5 rounded-2xl border border-amber-900/15 space-y-2.5';
+            div.innerHTML = `
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-bold text-emeraldDeep">Chapter #${idx}</span>
+                    ${idx > 1 ? `<button type="button" onclick="this.closest('.chapter-entry').remove()" class="text-xs text-red-600 hover:underline cursor-pointer">Remove</button>` : ''}
+                </div>
+                <input type="text" dir="${meta.dir}" placeholder="Chapter Title (باب کا عنوان)..." class="chap-title-input dir-aware-input ${meta.alignClass} ${meta.dir === 'rtl' ? meta.fontClass : 'font-sans'} w-full px-3 py-2 rounded-xl bg-white border border-amber-900/15 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldDeep">
+                <textarea rows="4" dir="${meta.dir}" placeholder="Write or paste chapter text here..." class="chap-content-input dir-aware-input ${meta.alignClass} ${meta.dir === 'rtl' ? meta.fontClass : 'font-sans'} w-full px-3 py-2 rounded-xl bg-white border border-amber-900/15 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldDeep"></textarea>
+            `;
+            container.appendChild(div);
+        };
+
+        window.updateFormDirection = function () {
+            const lang = document.getElementById('pubLanguage').value;
+            const meta = getScriptMeta(lang);
+            const badge = document.getElementById('dirIndicatorBadge');
+
+            if (badge) {
+                badge.textContent = meta.dir === 'rtl'
+                    ? 'Direction: Right-to-Left (RTL)'
+                    : 'Direction: Left-to-Right (LTR)';
+            }
+
+            document.querySelectorAll('.dir-aware-input').forEach((el) => {
+                el.setAttribute('dir', meta.dir);
+                el.classList.remove('font-urdu', 'font-arabic', 'font-sans', 'text-right', 'text-left');
+                el.classList.add(meta.dir === 'rtl' ? meta.fontClass : 'font-sans', meta.alignClass);
+            });
+        };
+
+        window.handleFileSelect = function (event) {
+            const file = event.target.files[0];
+            const statusNote = document.getElementById('fileStatusNote');
+            pendingFileAttachment = null;
+
+            if (!file) {
+                statusNote.classList.add('hidden');
+                return;
+            }
+
+            if (file.size > 700 * 1024) {
+                showToast('File exceeds 700 KB limit. Please attach a smaller file or paste text directly.', true);
+                event.target.value = '';
+                statusNote.classList.add('hidden');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                pendingFileAttachment = {
+                    fileName: file.name,
+                    fileDataUrl: e.target.result
+                };
+                statusNote.textContent = `Attached: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+                statusNote.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+
+            if (file.name.endsWith('.txt') || file.name.endsWith('.md')) {
+                const textReader = new FileReader();
+                textReader.onload = function (ev) {
+                    const pubType = document.getElementById('pubType').value;
+                    if (pubType === 'Book') {
+                        const firstChapText = document.querySelector('.chap-content-input');
+                        if (firstChapText && !firstChapText.value.trim()) {
+                            firstChapText.value = ev.target.result;
+                        }
+                    } else {
+                        const contentBox = document.getElementById('pubContent');
+                        if (!contentBox.value.trim()) {
+                            contentBox.value = ev.target.result;
+                        }
+                    }
+                };
+                textReader.readAsText(file);
+            }
+        };
+
+        window.handlePublishSubmit = async function (event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('publishSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-70');
+
+            const pubType = document.getElementById('pubType').value;
+            let chapters = [];
+            let singleContent = '';
+
+            if (pubType === 'Book') {
+                document.querySelectorAll('.chapter-entry').forEach((entry, index) => {
+                    const cTitle = entry.querySelector('.chap-title-input').value.trim() || `Chapter ${index + 1}`;
+                    const cText = entry.querySelector('.chap-content-input').value.trim();
+                    if (cText) {
+                        chapters.push({ title: cTitle, content: cText });
+                    }
+                });
+                if (chapters.length === 0 && !pendingFileAttachment) {
+                    showToast('Please enter text in at least one chapter or attach a PDF/TXT file.', true);
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-70');
+                    return;
+                }
+                if (chapters.length === 0 && pendingFileAttachment) {
+                    chapters.push({ title: 'Attached Manuscript', content: 'Please open or download the attached document above to read the full manuscript.' });
+                }
+            } else {
+                singleContent = document.getElementById('pubContent').value.trim();
+                if (!singleContent && !pendingFileAttachment) {
+                    showToast('Please enter your article content or attach a file.', true);
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-70');
+                    return;
+                }
+                if (!singleContent && pendingFileAttachment) {
+                    singleContent = 'Please open or download the attached document above to read the full article.';
+                }
+            }
+
+            const newEntry = {
+                title: document.getElementById('pubTitle').value.trim(),
+                author: document.getElementById('pubAuthor').value.trim(),
+                language: document.getElementById('pubLanguage').value,
+                type: pubType,
+                category: document.getElementById('pubCategory').value,
+                coverTheme: selectedCoverTheme,
+                coverImage: pendingCoverImage,
+                year: new Date().getFullYear().toString(),
+                likes: 1,
+                summary: document.getElementById('pubSummary').value.trim(),
+                chapters: pubType === 'Book' ? chapters : [],
+                content: pubType === 'Article' ? singleContent : '',
+                fileName: pendingFileAttachment ? pendingFileAttachment.fileName : '',
+                fileDataUrl: pendingFileAttachment ? pendingFileAttachment.fileDataUrl : '',
+                createdAt: Date.now()
+            };
+
+            try {
+                if (db && currentUser) {
+                    const worksColRef = collection(db, 'artifacts', appId, 'public', 'data', 'library_items');
+                    await addDoc(worksColRef, newEntry);
+                } else {
+                    userWorks.unshift({ id: 'local-' + Date.now(), ...newEntry });
+                    updateAnalyticsBar();
+                    renderLibrary();
+                }
+
+                document.getElementById('publishForm').reset();
+                document.getElementById('chaptersInputContainer').innerHTML = '';
+                pendingFileAttachment = null;
+                pendingCoverImage = '';
+                document.getElementById('fileStatusNote').classList.add('hidden');
+                document.getElementById('coverStatusNote').classList.add('hidden');
+                closeUploadModal();
+                showToast(`"${newEntry.title}" published to Maktaba-tul-Ilm!`);
+            } catch (err) {
+                console.error('Publish failed:', err);
+                showToast('Could not save to cloud. Check file sizes and try again.', true);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-70');
+            }
+        };
+
+        // Toast Notification Helper
+        function showToast(message, isError = false) {
+            const box = document.getElementById('toastBox');
+            const msgEl = document.getElementById('toastMessage');
+            const iconEl = document.getElementById('toastIcon');
+
+            msgEl.textContent = message;
+            iconEl.setAttribute('data-lucide', isError ? 'alert-circle' : 'check-circle-2');
+            iconEl.className = isError ? 'w-5 h-5 text-red-400 shrink-0' : 'w-5 h-5 text-goldAccent shrink-0';
+            if (window.lucide) lucide.createIcons();
+
+            box.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                box.classList.add('translate-y-24', 'opacity-0');
+            }, 3800);
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeReaderModal();
+                closeUploadModal();
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+            updateAnalyticsBar();
+            renderLibrary();
+            initLibraryCloud();
+        });
+    </script>
+</body>
+</html>
